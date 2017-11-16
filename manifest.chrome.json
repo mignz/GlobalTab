@@ -12,15 +12,9 @@
   "chrome_url_overrides": {
     "newtab": "globaltab.html"
   },
-  "chrome_settings_overrides": {
-    "homepage": "globaltab.html"
-  },
   "permissions": [
-    "bookmarks"
-  ],
-  "applications": {
-    "gecko": {
-      "strict_min_version": "57.0"
-    }
-  }
+    "bookmarks",
+    "management",
+    "chrome://favicon/"
+  ]
 }

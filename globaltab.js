@@ -1,5 +1,10 @@
 /* GlobalTab - Author: Miguel Nunes */
 
+let firefox = true;
+if (navigator.vendor == 'Google Inc.') {
+  firefox = false;
+}
+
 const colors = [
   '#168FC7',
   '#C61746',
@@ -29,7 +34,11 @@ function $(query) {
  * @return {string}
  */
 function getIcon(url) {
-  return '<img src="chrome://favicon/' + url + '" width="16" height="16" alt="">';
+  if (firefox !== true) {
+    return '<img src="chrome://favicon/' + url + '" width="16" height="16" alt="">';
+  } else {
+    return '<img src="https://s2.googleusercontent.com/s2/favicons?domain_url=' + url + '" width="16" height="16" alt="&#9654;">';
+  }
 }
 
 /**
@@ -68,7 +77,7 @@ function listFolders(bookmarkFolders) {
     $('.grid').innerHTML +=
       '<div class="grid-item"><div class="title" style="border-top:4px solid ' +
       colors[i] + ';">' + folder.title +
-      '<span class="all">&and;&angrt;&angrt;</span></div><div class="links">' +
+      '<span class="all">&#9656; All</span></div><div class="links">' +
       listBookmarks(folder.children) + '</div></div>';
     i++;
   });
@@ -93,7 +102,8 @@ function listFolders(bookmarkFolders) {
 function start() {
   chrome.bookmarks.getTree(
     function(bookmark) {
-      const allBookmarks = bookmark[0].children[1].children;
+      const bookmarkArea = firefox === true ? 0 : 1;
+      const allBookmarks = bookmark[0].children[bookmarkArea].children;
       const globalKey = _.findKey(allBookmarks, {title: 'GlobalTab'});
       const bookmarkFolders = allBookmarks[globalKey];
       listFolders(bookmarkFolders);
