@@ -4,7 +4,7 @@ Google Chrome/Firefox extension that opens a new tab page showing your favorite 
 
 ## Publishing
 
-Zip all content except `GlobalTab.pem`.
+Zip all contents except the hidden files.
 
 ## Changing browser
 

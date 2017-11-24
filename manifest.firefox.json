@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "GlobalTab",
   "description": "New tab page showing your favorite bookmarks.",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "icons": {
     "16": "assets/img/icon_16.png",
     "48": "assets/img/icon_48.png",
@@ -16,9 +16,15 @@
   "chrome_url_overrides": {
     "newtab": "globaltab.html"
   },
+  "chrome_settings_overrides": {
+    "homepage": "globaltab.html"
+  },
   "permissions": [
-    "bookmarks",
-    "management",
-    "chrome://favicon/"
-  ]
+    "bookmarks"
+  ],
+  "applications": {
+    "gecko": {
+      "strict_min_version": "57.0"
+    }
+  }
 }

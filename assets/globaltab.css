@@ -1,3 +1,5 @@
+/*! GlobalTab - Author: Miguel Nunes */
+
 * { box-sizing: border-box; }
 
 html { overflow-y: scroll; }
@@ -40,7 +42,7 @@ a:hover {
 }
 
 .grid-item:after {
-    background: url("shadow-right.png") bottom center no-repeat;
+    background: url("img/shadow-right.png") bottom center no-repeat;
     content: '';
     display: block;
     width: 100px;
@@ -51,7 +53,7 @@ a:hover {
 }
 
 .grid-item:before {
-    background: url("shadow-left.png") bottom left no-repeat;
+    background: url("img/shadow-left.png") bottom left no-repeat;
     content: '';
     display: block;
     width: 100px;
@@ -69,7 +71,8 @@ a:hover {
     text-transform: uppercase;
 }
 
-.title span {
+.title span,
+.manage span {
     background: rgb(235, 235, 235);
     color: #5a5a5a;
     cursor: pointer;
@@ -97,4 +100,10 @@ li img {
     margin-bottom: -1px;
     margin-right: 6px;
     vertical-align: bottom;
+}
+
+.manage {
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
 }

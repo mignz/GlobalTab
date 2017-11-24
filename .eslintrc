@@ -1,9 +1,11 @@
 {
   "env": {
-    "browser": true,
-    "es6": true
+    "browser": true
   },
   "extends": [
     "google"
-  ]
+  ],
+  "rules": {
+    "no-var": 0
+  }
 }
