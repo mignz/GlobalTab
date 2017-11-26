@@ -8,4 +8,4 @@ Zip all contents except the hidden files.
 
 ## Changing browser
 
-This repository contains the extension for both Google Chrome and Firefox. To change between the two, rename the manifest file to `manifest.json` for the correct browser.
+This repository contains the manifest for both Google Chrome and Firefox. To change between the two, rename the file to `manifest.json` for the correct browser.

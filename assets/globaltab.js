@@ -99,7 +99,6 @@ function listFolders(bookmarkFolders) {
  */
 function addSample() {
   chrome.bookmarks.create({
-    'parentId': firefox === true ? '0' : '2', // TEST IN FIREFOX
     'title': 'GlobalTab',
   }, function(globalTabFolder) {
     chrome.bookmarks.create({
@@ -113,8 +112,8 @@ function addSample() {
       });
       chrome.bookmarks.create({
         'parentId': googleFolder.id,
-        'title': 'Google Drive',
-        'url': 'https://drive.google.com/',
+        'title': 'Google Play',
+        'url': 'https://play.google.com/',
       });
       chrome.bookmarks.create({
         'parentId': googleFolder.id,
@@ -126,8 +125,19 @@ function addSample() {
         'title': 'YouTube',
         'url': 'https://www.youtube.com/',
       });
+      chrome.bookmarks.create({
+        'parentId': googleFolder.id,
+        'title': 'Google Translate',
+        'url': 'https://translate.google.com/',
+      });
+      chrome.bookmarks.create({
+        'parentId': googleFolder.id,
+        'title': 'Google Photos',
+        'url': 'https://photos.google.com/',
+      }, function() {
+        location.reload();
+      });
     });
-    location.reload();
   });
 }
 
@@ -135,7 +145,7 @@ function addSample() {
  * Show a welcome message when no bookmarks available
  */
 function showWelcome() {
-  $('.grid').innerHTML = '<div><img src="https://i.giphy.com/media/MJ0sxcBzT3mTu/giphy.webp" width="500" height="264"><h1>Woops!</h1><p>Seems like you have not configured GlobalTab with bookmarks yet!</p><p>Click <a href="#" class="sample"><b>here</b></a> to add some example folders and links.<br />These can be changed in your browser\'s bookmark manager inside the GlobalTab folder.</p><p><small>If you have synchronized your browser bookmarks, login to your account to download the synchronized data and reload this page.</small></p></div>';
+  $('.grid').innerHTML = '<div><img src="https://i.giphy.com/media/MJ0sxcBzT3mTu/giphy.gif" width="500" height="264"><h1>Woops!</h1><p>Seems like you have not configured GlobalTab with bookmarks yet!</p><p>Click <a href="#" class="sample"><b>here</b></a> to add an example folder and some links.<br />These can be changed in your browser\'s bookmark manager inside the GlobalTab folder.</p><p><small>If you have synchronized your browser bookmarks, login to your account to download the synchronized data and reload this page.</small></p></div>';
   $('.sample').addEventListener('click', addSample);
 }
 
@@ -145,7 +155,7 @@ function showWelcome() {
 function start() {
   chrome.bookmarks.getTree(
     function(bookmark) {
-      var all = bookmark[0].children[firefox === true ? 0 : 1].children;
+      var all = bookmark[0].children[firefox === true ? 2 : 1].children;
       var globalKey = _.findKey(all, {title: 'GlobalTab'});
       var folders = all[globalKey];
       if (globalKey !== undefined && folders.children.length > 0) {
@@ -160,8 +170,13 @@ function start() {
 document.addEventListener('DOMContentLoaded', function() {
   start();
   $('.manage').addEventListener('click', function() {
-    chrome.tabs.create({
-      url: 'chrome://bookmarks/', // TEST IN FIREFOX
-    });
+    if (firefox === true) {
+      // Todo: find a way to toggle the bookmarks sidebar
+      alert('Press Ctrl+B or Cmd+B to open the bookmarks sidebar.');
+    } else {
+      chrome.tabs.create({
+        url: 'chrome://bookmarks/',
+      });
+    }
   });
 });

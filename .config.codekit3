@@ -43,7 +43,7 @@
 		"ft": 16,
 		"ma": 1,
 		"oA": 0,
-		"oAP": "\/globaltab.min.css",
+		"oAP": "\/assets\/globaltab.min.css",
 		"oF": 2,
 		"oS": 3
 		},
@@ -52,7 +52,7 @@
 		"ma": 1,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/globaltab.min.js",
+		"oAP": "\/assets\/globaltab.min.js",
 		"oF": 2,
 		"sC": 0,
 		"tS": 0
@@ -90,50 +90,6 @@
 		"oA": 0,
 		"oAP": "\/assets\/globaltab.min.js.map",
 		"oF": 0
-		},
-	"\/assets\/img\/icon_128.png": {
-		"ft": 32768,
-		"iS": 1991,
-		"oA": 0,
-		"oAP": "\/assets\/img\/icon_128.png",
-		"oF": 0,
-		"oIPL": 1,
-		"opt": 1,
-		"oT": 1,
-		"q": 100
-		},
-	"\/assets\/img\/icon_16.png": {
-		"ft": 32768,
-		"iS": 295,
-		"oA": 0,
-		"oAP": "\/assets\/img\/icon_16.png",
-		"oF": 0,
-		"oIPL": 1,
-		"opt": 1,
-		"oT": 1,
-		"q": 100
-		},
-	"\/assets\/img\/icon_24.png": {
-		"ft": 32768,
-		"iS": 443,
-		"oA": 0,
-		"oAP": "\/assets\/img\/icon_24.png",
-		"oF": 0,
-		"oIPL": 1,
-		"opt": 1,
-		"oT": 1,
-		"q": 100
-		},
-	"\/assets\/img\/icon_48.png": {
-		"ft": 32768,
-		"iS": 938,
-		"oA": 0,
-		"oAP": "\/assets\/img\/icon_48.png",
-		"oF": 0,
-		"oIPL": 1,
-		"opt": 1,
-		"oT": 1,
-		"q": 100
 		},
 	"\/assets\/img\/shadow-left.png": {
 		"ft": 32768,
@@ -235,6 +191,28 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
+		},
+	"\/screenshots\/frame-chrome-mac.png": {
+		"ft": 32768,
+		"iS": 359639,
+		"oA": 0,
+		"oAP": "\/screenshots\/frame-chrome-mac.png",
+		"oF": 0,
+		"oIPL": 1,
+		"opt": 1,
+		"oT": 1,
+		"q": 100
+		},
+	"\/screenshots\/frame-firefox-mac.png": {
+		"ft": 32768,
+		"iS": 364103,
+		"oA": 0,
+		"oAP": "\/screenshots\/frame-firefox-mac.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
 		}
 	},
 "hooks": [

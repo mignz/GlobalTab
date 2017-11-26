@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "GlobalTab",
   "description": "New tab page showing your favorite bookmarks.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "icons": {
     "16": "assets/img/icon_16.png",
     "48": "assets/img/icon_48.png",
