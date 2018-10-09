@@ -1,182 +1,253 @@
-/* GlobalTab - Author: Miguel Nunes */
+/*! GlobalTab by Miguel Nunes - https://github.com/mignz/GlobalTab */
 
-var firefox = navigator.vendor == 'Google Inc.' ? false : true;
-
-var colors = [
-  '#168FC7',
-  '#C61746',
-  '#17C692',
-  '#B8C617',
-  '#9E17C6',
-  '#C66617',
-  '#9B9B9B',
-  '#174FC6',
-  '#4AA82B',
-  '#C6177D',
-  '#C14545',
-];
-
-/**
- * Returns element with certain query
- * @param {string} query
- * @return {object}
- */
-function $(query) {
-  return document.querySelector(query);
-}
-
-/**
- * Returns a bookmark icon
- * @param {string} url
- * @return {string}
- */
-function getIcon(url) {
-  if (firefox !== true) {
-    return '<img src="chrome://favicon/' + url + '" width="16" height="16" alt="&#9654;">';
-  } else {
-    return '<img src="https://s2.googleusercontent.com/s2/favicons?domain_url=' + url + '" width="16" height="16" alt="&#9654;">';
+class GlobalTab {
+  constructor() {
+    this.browser = navigator.vendor == 'Google Inc.' ? 1 : 0
+    this.globalTabId = -1
+    this.dragLi = null
+    this.populateBookmarks(this.browser == 1 ? '2' : 'unfiled_____')
+  }
+  launchMasonry() {
+    return new Masonry('.grid', {
+      itemSelector: '.box',
+      columnWidth: '.sizer',
+      percentPosition: true,
+    })
+  }
+  populateBookmarks(parentId) {
+    const that = this
+    chrome.bookmarks.getChildren(parentId.toString(), function(generalBookmarks) {
+      if (generalBookmarks === undefined) {
+        alert('Unable to find "Other Bookmarks" folder with ID:' + parentId + '.')
+      }
+      for (let i = 0; i < generalBookmarks.length; i++) {
+        if ('GlobalTab' == generalBookmarks[i].title) {
+          that.globalTabId = generalBookmarks[i].id
+          break
+        }
+      }
+      if (that.globalTabId !== undefined && that.globalTabId !== -1) {
+        chrome.bookmarks.getChildren(that.globalTabId, function(bookmarkFolder) {
+          const cbf = bookmarkFolder.length
+          for (let i = 0; i < cbf; i++) {
+            chrome.bookmarks.getChildren(bookmarkFolder[i].id, function(bookmarks) {
+              const cb = bookmarks.length
+              let items = []
+              let c = 0
+              for (let x = 0; x < cb; x++) {
+                items.push({
+                  title: bookmarks[x].title,
+                  url: bookmarks[x].url,
+                  id: bookmarks[x].id,
+                })
+                c = x
+              }
+              that.addBox(bookmarkFolder[i].title, items, bookmarks[c].parentId)
+              if (i == cbf - 1 && c == cb - 1) {
+                that.launchMasonry()
+                that.addEvents()
+              }
+            })
+          }
+        })
+      } else {
+        that.welcome()
+      }
+    })
+  }
+  addBox(title, items, parentId) {
+    const griditem = document.createElement('div')
+    griditem.className = 'box'
+    const inner = document.createElement('div')
+    inner.className = 'inner'
+    const h1 = document.createElement('h1')
+    h1.innerHTML = title
+    h1.title = 'Open all links'
+    const sa = document.createElement('div')
+    sa.className = 'button button-add'
+    sa.innerHTML = 'ADD'
+    sa.pid = parentId
+    inner.appendChild(sa)
+    const ul = document.createElement('ul')
+    for (let i = 0; i < items.length; i++) {
+      let li = document.createElement('li')
+      li.bid = items[i].id
+      li.draggable = true
+      let a = document.createElement('a')
+      if (items[i].title == '') {
+        a.innerHTML = ''
+        li.className = 'spacer'
+      } else {
+        a.innerHTML = this.getIcon(items[i].url) + ' ' + items[i].title
+      }
+      a.href = items[i].url
+      a.bid = items[i].id
+      let st = document.createElement('span')
+      st.className = 'button button-trash'
+      st.innerHTML = 'TRASH'
+      st.title = 'Remove'
+      let se = document.createElement('span')
+      se.className = 'button button-edit'
+      se.innerHTML = 'EDIT'
+      se.title = 'Edit'
+      a.appendChild(st)
+      a.appendChild(se)
+      li.appendChild(a)
+      ul.appendChild(li)
+    }
+    inner.appendChild(h1)
+    inner.appendChild(ul)
+    griditem.appendChild(inner)
+    document.querySelector('.grid').appendChild(griditem)
+  }
+  getIcon(url) {
+    if (this.browser == 1) {
+      return '<div class="img"><img src="chrome://favicon/' + url + '" width="16" height="16" alt="&#9737;"></div>';
+    } else {
+      return '<div class="img"><img src="https://s2.googleusercontent.com/s2/favicons?domain_url=' + url + '" width="16" height="16" alt="&#9737;"></div>';
+    }
+  }
+  addEvents() {
+    this.addOpenAllEvent()
+    this.addAddEvent()
+    this.addEditEvent()
+    this.addRemoveEvent()
+    this.addDragEvents()
+  }
+  addOpenAllEvent() {
+    const btns = document.querySelectorAll('h1')
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function(e) {
+        for (let x = 0; x < e.target.nextSibling.children.length; x++) {
+          chrome.tabs.create({
+            url: e.target.nextSibling.children[x].children[0].href,
+          });
+        }
+      }, false)
+    }
+  }
+  addAddEvent() {
+    const btns = document.querySelectorAll('.button-add')
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', this.handleAddEvent, false)
+    }
+  }
+  handleAddEvent(e) {
+    e.preventDefault()
+    const newTitle = prompt('Bookmark Title')
+    const newUrl = prompt('Address', 'https://')
+    if (newTitle != null && newTitle != '' && newUrl != '') {
+      chrome.bookmarks.create({
+        parentId: e.target.pid,
+        title: newTitle,
+        url: newUrl,
+      }, function() {
+        location.reload()
+      })
+    } else {
+      alert('Empty or invalid title or URL.')
+    }
+  }
+  addEditEvent() {
+    const btns = document.querySelectorAll('.button-edit')
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', this.handleEditEvent, false)
+    }
+  }
+  handleEditEvent(e) {
+    e.preventDefault()
+    chrome.bookmarks.get(e.target.parentNode.bid, function(bookmark) {
+      const newTitle = prompt('Bookmark Title', bookmark[0].title)
+      const newUrl = prompt('Address', bookmark[0].url)
+      if (newTitle != '' && newUrl != '') {
+        chrome.bookmarks.update(e.target.parentNode.bid, {title: newTitle, url: newUrl}, function() {
+          location.reload()
+        })
+      } else {
+        alert('You didn\'t fill the title or URL.')
+      }
+    })
+  }
+  addRemoveEvent() {
+    const btns = document.querySelectorAll('.button-trash')
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', this.handleRemoveEvent, false)
+    }
+  }
+  handleRemoveEvent(e) {
+    e.preventDefault()
+    if (confirm('Remove the bookmark?')) {
+      chrome.bookmarks.remove(e.target.parentNode.bid, function() {
+        location.reload()
+      })
+    }
+  }
+  addDragEvents() {
+    const that = this
+    const lis = document.querySelectorAll('li')
+    for (let i = 0; i < lis.length; i++) {
+      lis[i].addEventListener('dragstart', function(e) {
+        if (that.browser != 1) {
+          e.dataTransfer.setData('Text', null);
+        }
+        e.target.style.opacity = '.3'
+        that.dragLi = e.target
+      }, false)
+      lis[i].addEventListener('dragenter', function(e) {
+        e.target.classList.add('over')
+      }, false)
+      lis[i].addEventListener('dragover', function(e) {
+        if (e.preventDefault) {
+          e.preventDefault()
+        }
+        e.dataTransfer.dropEffect = 'move'
+      }, false)
+      lis[i].addEventListener('dragleave', function(e) {
+        e.target.classList.remove('over')
+      }, false)
+      lis[i].addEventListener('drop', function(e) {
+        e.preventDefault()
+        if (e.stopPropagation) {
+          e.stopPropagation()
+        }
+        if (that.dragLi != e.target) {
+          chrome.bookmarks.get(e.target.bid, function(n) {
+            chrome.bookmarks.get(that.dragLi.bid, function(o) {
+              let newIndex = n[0].index
+              if (n[0].parentId == o[0].parentId && n[0].index > o[0].index && that.browser != 1) {
+                newIndex += 1
+              }
+              chrome.bookmarks.move(o[0].id, {parentId: n[0].parentId, index: newIndex}, function() {
+                location.reload()
+              })
+            })
+          })
+        }
+        return false
+      }, false)
+      lis[i].addEventListener('dragend', function(e) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.target.style.opacity = '1'
+      }, false)
+    }
+  }
+  welcome() {
+    chrome.bookmarks.create({parentId: this.browser == 1 ? '2' : 'unfiled_____', title: 'GlobalTab'}, function(gtmain) {
+      chrome.bookmarks.create({parentId: gtmain.id, title: 'Google'}, function(google) {
+        chrome.bookmarks.create({parentId: google.id, title: 'Google Search', url: 'https://www.google.com/'}, function() {
+          chrome.bookmarks.create({parentId: google.id, title: 'Google Play', url: 'https://play.google.com/'}, function() {
+            chrome.bookmarks.create({parentId: google.id, title: 'Google Maps', url: 'https://www.google.com/maps'}, function() {
+              alert('Welcome to GlobalTab!\n\nWe have created an example bookmark panel for you.\nYou can create more bookmark panels using your browser\'s native bookmark manager.\nAdd and organise folders inside GlobalTab.')
+              location.reload()
+            })
+          })
+        })
+      })
+    })
   }
 }
 
-/**
- * Auto div placement with Masonry
- */
-function formatFolders() {
-  new Masonry($('.grid'), {
-    columnWidth: '.grid-sizer',
-    gutter: 24,
-    itemSelector: '.grid-item',
-    percentPosition: true,
-  });
-}
-
-/**
- * List bookmarks
- * @param {object} bookmarks
- * @return {string}
- */
-function listBookmarks(bookmarks) {
-  var bookmarkItems = '<ul>';
-  _.forEach(bookmarks, function(mark) {
-    bookmarkItems += '<a href="' + mark.url + '"><li>' +
-    getIcon(mark.url) + '' + mark.title + '</li></a>';
-  });
-  return bookmarkItems + '</ul>';
-}
-
-/**
- * List bookmark folders
- * @param {object} bookmarkFolders
- */
-function listFolders(bookmarkFolders) {
-  var i = 0;
-  _.forOwn(bookmarkFolders.children, function(folder) {
-    $('.grid').innerHTML +=
-      '<div class="grid-item"><div class="title" style="border-top:4px solid ' +
-      colors[i] + ';">' + folder.title +
-      '<span class="all" title="Open all links">&#9656; All</span>' +
-      '</div><div class="links">' +
-      listBookmarks(folder.children) + '</div></div>';
-    i++;
-  });
-  formatFolders();
-  _.forEach(document.querySelectorAll('.all'), function(button) {
-    button.addEventListener('click', function() {
-      _.forEach(
-        this.parentNode.parentNode.children[1].children[0].children,
-        function(link) {
-          chrome.tabs.create({
-            url: link.href,
-          });
-        }
-      );
-    });
-  });
-}
-
-/**
- * Add sample bookmarks
- */
-function addSample() {
-  chrome.bookmarks.create({
-    'title': 'GlobalTab',
-  }, function(globalTabFolder) {
-    chrome.bookmarks.create({
-      'parentId': globalTabFolder.id,
-      'title': 'Google Services',
-    }, function(googleFolder) {
-      chrome.bookmarks.create({
-        'parentId': googleFolder.id,
-        'title': 'Google Search',
-        'url': 'https://www.google.com/',
-      });
-      chrome.bookmarks.create({
-        'parentId': googleFolder.id,
-        'title': 'Google Play',
-        'url': 'https://play.google.com/',
-      });
-      chrome.bookmarks.create({
-        'parentId': googleFolder.id,
-        'title': 'Google Maps',
-        'url': 'https://maps.google.com/',
-      });
-      chrome.bookmarks.create({
-        'parentId': googleFolder.id,
-        'title': 'YouTube',
-        'url': 'https://www.youtube.com/',
-      });
-      chrome.bookmarks.create({
-        'parentId': googleFolder.id,
-        'title': 'Google Translate',
-        'url': 'https://translate.google.com/',
-      });
-      chrome.bookmarks.create({
-        'parentId': googleFolder.id,
-        'title': 'Google Photos',
-        'url': 'https://photos.google.com/',
-      }, function() {
-        location.reload();
-      });
-    });
-  });
-}
-
-/**
- * Show a welcome message when no bookmarks available
- */
-function showWelcome() {
-  $('.grid').innerHTML = '<div><img src="https://i.giphy.com/media/MJ0sxcBzT3mTu/giphy.gif" width="500" height="264"><h1>Woops!</h1><p>Seems like you have not configured GlobalTab with bookmarks yet!</p><p>Click <a href="#" class="sample"><b>here</b></a> to add an example folder and some links.<br />These can be changed in your browser\'s bookmark manager inside the GlobalTab folder.</p><p><small>If you have synchronized your browser bookmarks, login to your account to download the synchronized data and reload this page.</small></p></div>';
-  $('.sample').addEventListener('click', addSample);
-}
-
-/**
- * Get bookmarks
- */
-function start() {
-  chrome.bookmarks.getTree(
-    function(bookmark) {
-      var all = bookmark[0].children[firefox === true ? 2 : 1].children;
-      var globalKey = _.findKey(all, {title: 'GlobalTab'});
-      var folders = all[globalKey];
-      if (globalKey !== undefined && folders.children.length > 0) {
-        listFolders(folders);
-      } else {
-        showWelcome();
-      }
-    }
-  );
-}
-
 document.addEventListener('DOMContentLoaded', function() {
-  start();
-  $('.manage').addEventListener('click', function() {
-    if (firefox === true) {
-      // Todo: find a way to toggle the bookmarks sidebar
-      alert('Press Ctrl+B or Cmd+B to open the bookmarks sidebar.');
-    } else {
-      chrome.tabs.create({
-        url: 'chrome://bookmarks/',
-      });
-    }
-  });
-});
+  new GlobalTab()
+})

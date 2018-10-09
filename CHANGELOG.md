@@ -1,5 +1,13 @@
 # Changelog
 
+## **1.2.0** - 9th of October, 2018
+
+- New: Script built from ground up, much faster now
+- New: Dark design
+- New: Added support for Firefox's spacer
+- New: Add/Edit/Order/Delete bookmarks from the extension
+- Fix: Grid wasn't working properly on all resolutions
+
 ## **1.1.0** - 24th of November, 2017
 
 - New: Extension is now public

@@ -2,10 +2,16 @@
   "env": {
     "browser": true
   },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
   "extends": [
     "google"
   ],
   "rules": {
-    "no-var": 0
+    "require-jsdoc": 0,
+    "semi": 0,
+    "spaced-comment": 0,
+    "max-len": 0
   }
 }

@@ -1,0 +1,185 @@
+/*! GlobalTab by Miguel Nunes - https://github.com/mignz/GlobalTab */
+
+// -- Variables ------------------------
+
+$color-bg: #262b35;
+$color-bg-box: #1b1e27;
+$color-bg-box-end-gradient: #20232d;
+$color-font: #a6aaaf;
+$color-font-grad-start: #eee;
+$color-font-grad-end: #888;
+$color-contrast: #2363ad;
+$color-white: #fff;
+
+// -- General --------------------------
+
+body {
+  background-color: $color-bg;
+  color: $color-font;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+  font-size: 14px;
+  margin: 0;
+  padding: 2px;
+}
+
+a {
+  color: $color-font;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-white;
+  }
+}
+
+// -- Buttons --------------------------
+
+.button {
+  color: $color-contrast;
+  display: none;
+  float: right;
+  font-size: .75em;
+  margin-top: 2px;
+
+  &:hover {
+    color: lighten($color-contrast, 30%);
+  }
+}
+
+.button-trash {
+  margin-left: 5px;
+}
+
+.button-add {
+  cursor: pointer;
+  font-size: 1em;
+  position: absolute;
+  right: 15px;
+  top: 24px;
+}
+
+// -- Grid -----------------------------
+
+.sizer,
+.box {
+  width: 20%;
+}
+
+.sizer {
+  min-width: 280px;
+}
+
+.box {
+  background: linear-gradient(to bottom, $color-bg-box 0%, $color-bg-box-end-gradient 100%);
+}
+
+@media (max-width: 1400px) {
+  .sizer,
+  .box {
+    width: 25%;
+  }
+}
+
+@media (max-width: 1120px) {
+  .sizer,
+  .box {
+    width: 33.333333333%;
+  }
+}
+
+@media (max-width: 840px) {
+  .sizer,
+  .box {
+    width: 50%;
+  }
+}
+
+@media (max-width: 560px) {
+  .sizer,
+  .box {
+    width: 100%;
+  }
+}
+
+.inner {
+  border: 2px solid $color-bg;
+  padding: 15px 0;
+  position: relative;
+
+  &:hover {
+    .button-add {
+      display: inline;
+    }
+  }
+
+  // sass-lint:disable no-vendor-prefixes property-sort-order
+  h1 {
+    background: -webkit-linear-gradient($color-font-grad-start, $color-font-grad-end);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    font-weight: 200;
+    margin: 0;
+    padding: 0 15px;
+    user-select: none;
+  }
+  // sass-lint:enable no-vendor-prefixes property-sort-order
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding: 0 15px;
+
+      &.over {
+        background: lighten($color-bg-box, 15%);
+      }
+
+      a {
+        display: block;
+        padding: 7px 0;
+        user-select: none;
+      }
+
+      .img {
+        background: lighten($color-bg-box, 15%);
+        border-radius: 15px;
+        color: $color-font;
+        display: inline;
+        padding: 5px;
+      }
+
+      img {
+        vertical-align: bottom;
+      }
+
+      &:hover {
+        background: lighten($color-bg-box, 5%);
+
+        &::before {
+          color: $color-font-grad-end;
+          content: '⋮';
+          cursor: move;
+          margin-left: -10px;
+          margin-top: 7px;
+          position: absolute;
+        }
+
+        &.spacer {
+          .button {
+            display: none;
+          }
+
+          &::before {
+            display: none;
+          }
+        }
+
+        span {
+          display: inline;
+        }
+      }
+    }
+  }
+}
