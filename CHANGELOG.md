@@ -1,5 +1,9 @@
 # Changelog
 
+## **1.2.1** - 30th of June, 2023
+
+- Update: Now using Chrome's mandatory Manifest V3
+
 ## **1.2.0** - 9th of October, 2018
 
 - New: Script built from ground up, much faster now

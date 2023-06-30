@@ -32,7 +32,7 @@ class GlobalTab {
           for (let i = 0; i < cbf; i++) {
             chrome.bookmarks.getChildren(bookmarkFolder[i].id, function(bookmarks) {
               const cb = bookmarks.length
-              let items = []
+              const items = []
               let c = 0
               for (let x = 0; x < cb; x++) {
                 items.push({
@@ -102,10 +102,14 @@ class GlobalTab {
   }
   getIcon(url) {
     if (this.browser == 1) {
-      return '<div class="img"><img src="chrome://favicon/' + url + '" width="16" height="16" alt="&#9737;"></div>';
+      const iconUrl = new URL(chrome.runtime.getURL('/_favicon/'))
+      iconUrl.searchParams.set('pageUrl', url)
+      iconUrl.searchParams.set('size', '32')
+      url = iconUrl.toString()
     } else {
-      return '<div class="img"><img src="https://s2.googleusercontent.com/s2/favicons?domain_url=' + url + '" width="16" height="16" alt="&#9737;"></div>';
+      url = 'https://s2.googleusercontent.com/s2/favicons?domain_url=' + url
     }
+    return '<div class="img"><img src="' + url + '" width="16" height="16" alt="&#9737;"></div>';
   }
   addEvents() {
     this.addOpenAllEvent()
