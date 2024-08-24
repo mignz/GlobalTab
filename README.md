@@ -4,15 +4,15 @@
 
 New tab page showing your favorite bookmarks.
 
-Changes your New Tab page to a useful area where you can see your favorite bookmarks categorised in panels.
+Change your New Tab page into a useful area where you can see your favorite bookmarks categorized into panels.
 
 **Features:**
 
 - Extremely light, opens really fast
-- Organise bookmarks in panels
-- Add/edit/re-order/remove bookmarks in the extension
-- Open all links in a panel in one click
-- Bookmarks synchronised using browser's native bookmarks manager
+- Bookmarks are categorized into panels
+- Add/edit/order/delete bookmarks in the extension
+- Open all links on a panel at one click
+- Bookmarks are synchronized using the browser's native bookmarks manager
 
 ## Stores
 

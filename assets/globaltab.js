@@ -2,7 +2,7 @@
 
 class GlobalTab {
   constructor() {
-    this.browser = navigator.vendor == 'Google Inc.' ? 1 : 0
+    this.browser = navigator.userAgent.indexOf('Chrome') > -1 ? 1 : 0
     this.globalTabId = -1
     this.dragLi = null
     this.populateBookmarks(this.browser == 1 ? '2' : 'unfiled_____')
@@ -22,6 +22,9 @@ class GlobalTab {
       }
       for (let i = 0; i < generalBookmarks.length; i++) {
         if ('GlobalTab' == generalBookmarks[i].title) {
+          if (generalBookmarks[i].url) {
+            continue
+          }
           that.globalTabId = generalBookmarks[i].id
           break
         }
@@ -70,10 +73,10 @@ class GlobalTab {
     inner.appendChild(sa)
     const ul = document.createElement('ul')
     for (let i = 0; i < items.length; i++) {
-      let li = document.createElement('li')
+      const li = document.createElement('li')
       li.bid = items[i].id
       li.draggable = true
-      let a = document.createElement('a')
+      const a = document.createElement('a')
       if (items[i].title == '') {
         a.innerHTML = ''
         li.className = 'spacer'
@@ -82,11 +85,11 @@ class GlobalTab {
       }
       a.href = items[i].url
       a.bid = items[i].id
-      let st = document.createElement('span')
+      const st = document.createElement('span')
       st.className = 'button button-trash'
       st.innerHTML = 'TRASH'
       st.title = 'Remove'
-      let se = document.createElement('span')
+      const se = document.createElement('span')
       se.className = 'button button-edit'
       se.innerHTML = 'EDIT'
       se.title = 'Edit'

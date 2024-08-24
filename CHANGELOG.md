@@ -1,5 +1,9 @@
 # Changelog
 
+## **1.2.2** - 30th of June, 2023
+
+- Fix: Unable to find GlobalTab bookmark folder in Chrome after update 127.0
+
 ## **1.2.1** - 30th of June, 2023
 
 - Update: Now using Chrome's mandatory Manifest V3
