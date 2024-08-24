@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "GlobalTab",
   "description": "New tab page showing your favorite bookmarks.",
   "version": "1.2.2",
@@ -18,9 +18,9 @@
   "permissions": [
     "bookmarks"
   ],
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
-      "strict_min_version": "57.0"
+      "id": "{a961c0b0-2bd4-42ca-8251-ae7b95f9f8af}"
     }
   }
 }
