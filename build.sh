@@ -1,9 +1,11 @@
 #!/bin/bash
 
 rm -rf build
-mkdir -p build/assets build/lib
+mkdir -p build/assets/img build/lib
 cp assets/globaltab.min.js build/assets/globaltab.min.js
 cp assets/globaltab.min.css build/assets/globaltab.min.css
+cp assets/img/icon_16.png build/assets/img/icon_16.png
+cp assets/img/icon_128.png build/assets/img/icon_128.png
 cp lib/minimasonry.min.js build/lib/minimasonry.min.js
 cp globaltab.html build/globaltab.html
 cp LICENSE build/LICENSE
@@ -19,6 +21,7 @@ cd ..
 
 # Firefox
 
+cp assets/img/icon_48.png build/assets/img/icon_48.png
 cp manifest.firefox.json build/manifest.json
 cd build
 zip -r GlobalTab.Firefox.zip . -x "*.zip"
