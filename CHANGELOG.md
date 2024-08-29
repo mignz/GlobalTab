@@ -1,8 +1,17 @@
 # Changelog
 
-## **1.2.2** - 30th of June, 2023
+## **1.3.0** - 29th of August, 2024
 
-- Fix: Unable to find GlobalTab bookmark folder in Chrome after update 127.0
+- New: Added a shortcut to manage bookmarks in the browser's native bookmark system (Google Chrome only)
+- Update: Redesigned the UI's dark theme
+- Update: Removed Add/Edit/Reordering in favor of browser's native bookmark system
+- Fix: The "Other bookmarks" folder's id may be different betweekn browsers crashing GlobalTab
+- Fix: Long bookmark names were breaking the UI
+- Fix: Adding an empty folder would break the grid
+
+## **1.2.2** - 25th of August, 2024
+
+- Fix: Unable to find GlobalTab bookmark folder in Chrome after update 127
 
 ## **1.2.1** - 30th of June, 2023
 
